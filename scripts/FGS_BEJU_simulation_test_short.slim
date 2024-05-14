@@ -1,0 +1,55 @@
+//setting up the simulation for BEJU
+initialize() {
+	defineConstant("BEJU_initial", 36186);
+	defineConstant("chr_len", 0);
+	defineConstant("FGS_prop", 0.13); // BEJU has 25% FGS phenotype frequency = 13% allele frequency
+	defineConstant("BEJU_FGS_pop", asInteger(BEJU_initial*FGS_prop));
+	
+	defineConstant("runseed",getSeed());
+	initializeMutationRate(0);
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	initializeMutationType("m2", 0.5, "f", 0.0);  // m2 is FGS mutation
+	m2.color = "purple";
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeGenomicElement(g1, 0, chr_len);
+	initializeRecombinationRate(0);}
+
+1 first() { sim.addSubpop("p1", BEJU_initial); }
+1 late() {
+	FGS_bir = sample(p1.individuals, BEJU_FGS_pop);
+	FGS_bir.genomes.addNewDrawnMutation(m2, 0);}
+
+1 early() { p1.setSubpopulationSize(36186); }
+13465 early() { p1.setSubpopulationSize(26306); }
+24507 early() { p1.setSubpopulationSize(20035); }
+33562 early() { p1.setSubpopulationSize(16223); }
+40988 early() { p1.setSubpopulationSize(14074); }
+47078 early() { p1.setSubpopulationSize(13220); }
+52072 early() { p1.setSubpopulationSize(13600); }
+56168 early() { p1.setSubpopulationSize(15362); }
+59526 early() { p1.setSubpopulationSize(18704); }
+62281 early() { p1.setSubpopulationSize(23703); }
+64540 early() { p1.setSubpopulationSize(29772); }
+66392 early() { p1.setSubpopulationSize(34253); }
+67911 early() { p1.setSubpopulationSize(34474); }
+69157 early() { p1.setSubpopulationSize(29688); }
+70179 early() { p1.setSubpopulationSize(19839); }
+71016 early() { p1.setSubpopulationSize(9706); }
+71703 early() { p1.setSubpopulationSize(71381); }
+72729 early() { p1.setSubpopulationSize(71381); }
+
+1:72729 late() {
+         if (sim.countOfMutationsOfType(m2) == 0)
+         {
+            fixed = (sum(sim.substitutions.mutationType == m2) == 1);
+            cat(ifelse(fixed, 
+            "run seed: " + runseed + ", FGS frequency is 1 at generation " + sim.cycle + "\n" +
+            "run seed: " + runseed + ", FGS frequency is 1 at generation " + 72729 + "\n" , 
+            "run seed: " + runseed + ", FGS frequency is 0 at generation " + sim.cycle + "\n" +
+            "run seed: " + runseed + ", FGS frequency is 0 at generation " + 72729 + "\n"));
+            sim.simulationFinished();
+} }
+
+72729 late() {
+cat("run seed: " + runseed + ", FGS frequency is " + sim.mutationFrequencies(p1, sim.mutationsOfType(m2)) + " at generation " + sim.cycle + "\n");
+}

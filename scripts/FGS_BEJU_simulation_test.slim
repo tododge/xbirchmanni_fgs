@@ -1,0 +1,64 @@
+//setting up the simulation for BEJU
+initialize() {
+	defineConstant("BEJU_initial", 86907);
+	defineConstant("chr_len", 0);
+	defineConstant("FGS_prop", 0.25); // BEJU has 25% FGS frequency
+	defineConstant("BEJU_FGS_pop", asInteger(BEJU_initial*FGS_prop));
+	
+	defineConstant("runseed",getSeed());
+	initializeMutationRate(0);
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	initializeMutationType("m2", 0.5, "f", 0.0);  // m2 is FGS mutation
+	m2.color = "purple";
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeGenomicElement(g1, 0, chr_len);
+	initializeRecombinationRate(0);}
+
+1 first() { sim.addSubpop("p1", BEJU_initial); }
+1 late() {
+	FGS_bir = sample(p1.individuals, BEJU_FGS_pop);
+	FGS_bir.genomes.addNewDrawnMutation(m2, 0);}
+
+1 early() { p1.setSubpopulationSize(86907); }
+80260 early() { p1.setSubpopulationSize(91887); }
+146078 early() { p1.setSubpopulationSize(97745); }
+200054 early() { p1.setSubpopulationSize(102582); }
+244319 early() { p1.setSubpopulationSize(103789); }
+280620 early() { p1.setSubpopulationSize(98643); }
+310389 early() { p1.setSubpopulationSize(86038); }
+334802 early() { p1.setSubpopulationSize(68376); }
+354822 early() { p1.setSubpopulationSize(50515); }
+371241 early() { p1.setSubpopulationSize(36186); }
+384705 early() { p1.setSubpopulationSize(26306); }
+395747 early() { p1.setSubpopulationSize(20035); }
+404802 early() { p1.setSubpopulationSize(16223); }
+412228 early() { p1.setSubpopulationSize(14074); }
+418318 early() { p1.setSubpopulationSize(13220); }
+423312 early() { p1.setSubpopulationSize(13600); }
+427408 early() { p1.setSubpopulationSize(15362); }
+430766 early() { p1.setSubpopulationSize(18704); }
+433521 early() { p1.setSubpopulationSize(23703); }
+435780 early() { p1.setSubpopulationSize(29772); }
+437632 early() { p1.setSubpopulationSize(34253); }
+439151 early() { p1.setSubpopulationSize(34474); }
+440397 early() { p1.setSubpopulationSize(29688); }
+441419 early() { p1.setSubpopulationSize(19839); }
+442256 early() { p1.setSubpopulationSize(9706); }
+442943 early() { p1.setSubpopulationSize(71381); }
+443969 early() { p1.setSubpopulationSize(71381); }
+
+1:443969 late() {
+         if (sim.countOfMutationsOfType(m2) == 0)
+         {
+            fixed = (sum(sim.substitutions.mutationType == m2) == 1);
+            cat(ifelse(fixed, 
+            "run seed: " + runseed + ", FGS frequency is 1 at generation " + sim.cycle + "\n" +
+            "run seed: " + runseed + ", FGS frequency is 1 at generation " + 443969 + "\n" , 
+            "run seed: " + runseed + ", FGS frequency is 0 at generation " + sim.cycle + "\n" +
+            "run seed: " + runseed + ", FGS frequency is 0 at generation " + 443969 + "\n"));
+            sim.simulationFinished();
+} }
+
+443969 late() {
+cat("run seed: " + runseed + ", FGS frequency is " + sim.mutationFrequencies(p1, sim.mutationsOfType(m2)) + " at generation " + sim.cycle + "\n");
+}

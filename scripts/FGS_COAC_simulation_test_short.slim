@@ -1,0 +1,54 @@
+//setting up the simulation for COAC, but starting from when it coalesces with IZAPA
+initialize() {
+	defineConstant("COAC_initial", 29672);
+	defineConstant("chr_len", 0);
+	defineConstant("FGS_prop", 0.29); // COAC has 50% FGS phenotype frequency = 0.29 allele frequency
+	defineConstant("COAC_FGS_pop", asInteger(COAC_initial*FGS_prop));
+	
+	defineConstant("runseed",getSeed());
+	initializeMutationRate(0);
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	initializeMutationType("m2", 0.5, "f", 0.0);  // m2 is FGS mutation
+	m2.color = "purple";
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeGenomicElement(g1, 0, chr_len);
+	initializeRecombinationRate(0);}
+
+1 first() { sim.addSubpop("p1", COAC_initial); }
+1 late() {
+	FGS_bir = sample(p1.individuals, COAC_FGS_pop);
+	FGS_bir.genomes.addNewDrawnMutation(m2, 0);}
+
+1 early() { p1.setSubpopulationSize(29672); }
+11716 early() { p1.setSubpopulationSize(22860); }
+21329 early() { p1.setSubpopulationSize(18621); }
+29219 early() { p1.setSubpopulationSize(16201); }
+35693 early() { p1.setSubpopulationSize(15265); }
+41006 early() { p1.setSubpopulationSize(15737); }
+45367 early() { p1.setSubpopulationSize(17770); }
+48945 early() { p1.setSubpopulationSize(21378); }
+51881 early() { p1.setSubpopulationSize(25485); }
+54291 early() { p1.setSubpopulationSize(27762); }
+56269 early() { p1.setSubpopulationSize(26581); }
+57891 early() { p1.setSubpopulationSize(23107); }
+59223 early() { p1.setSubpopulationSize(17747); }
+60316 early() { p1.setSubpopulationSize(10888); }
+61213 early() { p1.setSubpopulationSize(5575); }
+61949 early() { p1.setSubpopulationSize(18540); }
+63049 early() { p1.setSubpopulationSize(18540); }
+
+1:63049 late() {
+         if (sim.countOfMutationsOfType(m2) == 0)
+         {
+            fixed = (sum(sim.substitutions.mutationType == m2) == 1);
+            cat(ifelse(fixed, 
+            "run seed: " + runseed + ", FGS frequency is 1 at generation " + sim.cycle + "\n" +
+            "run seed: " + runseed + ", FGS frequency is 1 at generation " + 63049 + "\n" , 
+            "run seed: " + runseed + ", FGS frequency is 0 at generation " + sim.cycle + "\n" +
+            "run seed: " + runseed + ", FGS frequency is 0 at generation " + 63049 + "\n"));
+            sim.simulationFinished();
+} }
+
+63049 late() {
+cat("run seed: " + runseed + ", FGS frequency is " + sim.mutationFrequencies(p1, sim.mutationsOfType(m2)) + " at generation " + sim.cycle + "\n");
+}

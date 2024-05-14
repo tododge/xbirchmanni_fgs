@@ -1,0 +1,61 @@
+//setting up the simulation for IZAPA
+initialize() {
+	defineConstant("IZAP_initial", 36553);
+	defineConstant("chr_len", 0);
+	defineConstant("FGS_prop", 0.23); // IZAPA has 40% FGS phenotype frequency = 23% allele frequency
+	defineConstant("IZAP_FGS_pop", asInteger(IZAP_initial*FGS_prop));
+	
+	defineConstant("runseed",getSeed());
+	initializeMutationRate(0);
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	initializeMutationType("m2", 0.5, "f", 0.0);  // m2 is FGS mutation
+	m2.color = "purple";
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeGenomicElement(g1, 0, chr_len);
+	initializeRecombinationRate(0);}
+
+1 first() { sim.addSubpop("p1", IZAP_initial); }
+1 late() {
+	FGS_bir = sample(p1.individuals, IZAP_FGS_pop);
+	FGS_bir.genomes.addNewDrawnMutation(m2, 0);}
+
+1 early() { p1.setSubpopulationSize(36553); }
+11941 early() { p1.setSubpopulationSize(37571); }
+21700 early() { p1.setSubpopulationSize(35530); }
+29676 early() { p1.setSubpopulationSize(31153); }
+36195 early() { p1.setSubpopulationSize(26210); }
+41522 early() { p1.setSubpopulationSize(22180); }
+45877 early() { p1.setSubpopulationSize(19513); }
+49435 early() { p1.setSubpopulationSize(17801); }
+52344 early() { p1.setSubpopulationSize(16244); }
+54721 early() { p1.setSubpopulationSize(14089); }
+56664 early() { p1.setSubpopulationSize(11170); }
+58252 early() { p1.setSubpopulationSize(8048); }
+59550 early() { p1.setSubpopulationSize(5400); }
+60611 early() { p1.setSubpopulationSize(3500); }
+61477 early() { p1.setSubpopulationSize(2258); }
+62186 early() { p1.setSubpopulationSize(1472); }
+62765 early() { p1.setSubpopulationSize(968); }
+63238 early() { p1.setSubpopulationSize(635); }
+63625 early() { p1.setSubpopulationSize(422); }
+63941 early() { p1.setSubpopulationSize(312); }
+64200 early() { p1.setSubpopulationSize(293); }
+64411 early() { p1.setSubpopulationSize(398); }
+64583 early() { p1.setSubpopulationSize(1015); }
+64725 early() { p1.setSubpopulationSize(8866); }
+
+1:64725 late() {
+         if (sim.countOfMutationsOfType(m2) == 0)
+         {
+            fixed = (sum(sim.substitutions.mutationType == m2) == 1);
+            cat(ifelse(fixed, 
+            "run seed: " + runseed + ", FGS frequency is 1 at generation " + sim.cycle + "\n" +
+            "run seed: " + runseed + ", FGS frequency is 1 at generation " + 64725 + "\n" , 
+            "run seed: " + runseed + ", FGS frequency is 0 at generation " + sim.cycle + "\n" +
+            "run seed: " + runseed + ", FGS frequency is 0 at generation " + 64725 + "\n"));
+            sim.simulationFinished();
+} }
+
+64725 late() {
+cat("run seed: " + runseed + ", FGS frequency is " + sim.mutationFrequencies(p1, sim.mutationsOfType(m2)) + " at generation " + sim.cycle + "\n");
+}
