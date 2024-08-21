@@ -1,7 +1,7 @@
 NUMBER=20
-genome=/scratch/groups/schumer/tris/falsegravid/gwas/xbir_WT/ref/xbir-COAC-16-VIII-22-M_v2023.1.fa
+genome=~/gwas/xbir_WT/ref/xbir-COAC-16-VIII-22-M_v2023.1.fa
 
-DIR=/scratch/groups/schumer/tris/falsegravid/gwas/xbir_WT/data/
+DIR=~/gwas/xbir_WT/data/
 
 ls $DIR/*read_1*.gz > R1list
 ls $DIR/*read_2*.gz > R2list
@@ -14,7 +14,7 @@ ls allfileslist.* > listoflists
 for line in `cat listoflists`
 do
     touch $line.mapping.sh
-    cat /home/groups/schumer/lab_member_folders/tris/sbatch_header_12hrs.txt | while read n
+    cat sbatch_header_12hrs.txt | while read n
     do
           echo $n >> $line.mapping.sh
     done
