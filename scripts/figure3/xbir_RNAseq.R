@@ -19,7 +19,7 @@ library(ashr)
 species<- "birchmanni"
 
 ## Read in sample files
-dir <- "/Users/trisdodge/Desktop/Stanford/falsegravid/RNAseq"
+dir <- "~/RNAseq"
 
 samples <- read.table(file.path(dir, "xbir_juv_samples.txt"), header = TRUE)
 
@@ -27,10 +27,7 @@ samples <- read.table(file.path(dir, "xbir_juv_samples.txt"), header = TRUE)
 samples$phenotype <- factor(samples$phenotype)
 samples$extraction_batch <- factor(samples$extraction_batch)
 
-# subset data by species
-
 focal_tissue <- "PM_EAM"
-#focal_tissue <- "Flank"
 focal_tissue <- "Brain"
 
 samples <- samples[samples$tissue == focal_tissue, ]
@@ -91,12 +88,12 @@ vst <- vst(dds,blind=FALSE)
 saveRDS(vst, paste0(dir,"/xbir_fgs_dge_",focal_tissue,"_vst.rds"))
 
 #load them in
-dds_PMEAM <- readRDS("/Users/trisdodge/Desktop/Stanford/falsegravid/RNAseq/xbir_fgs_dge_PM_EAM_dds.rds")
-vst_PMEAM <- readRDS("/Users/trisdodge/Desktop/Stanford/falsegravid/RNAseq/xbir_fgs_dge_PM_EAM_vst.rds")   
-dds_Flank <- readRDS("/Users/trisdodge/Desktop/Stanford/falsegravid/RNAseq/xbir_fgs_dge_Flank_dds.rds")
-vst_Flank <- readRDS("/Users/trisdodge/Desktop/Stanford/falsegravid/RNAseq/xbir_fgs_dge_Flank_vst.rds")   
-dds_Brain <- readRDS("/Users/trisdodge/Desktop/Stanford/falsegravid/RNAseq/xbir_fgs_dge_Brain_dds.rds")
-vst_Brain <- readRDS("/Users/trisdodge/Desktop/Stanford/falsegravid/RNAseq/xbir_fgs_dge_Brain_vst.rds")   
+dds_PMEAM <- readRDS("~/RNAseq/xbir_fgs_dge_PM_EAM_dds.rds")
+vst_PMEAM <- readRDS("~/RNAseq/xbir_fgs_dge_PM_EAM_vst.rds")   
+dds_Flank <- readRDS("~/RNAseq/xbir_fgs_dge_Flank_dds.rds")
+vst_Flank <- readRDS("~/RNAseq/xbir_fgs_dge_Flank_vst.rds")   
+dds_Brain <- readRDS("~/RNAseq/xbir_fgs_dge_Brain_dds.rds")
+vst_Brain <- readRDS("~/RNAseq/xbir_fgs_dge_Brain_vst.rds")   
 
 
 res.wtvsfgs_PMEAM <- lfcShrink(dds_PMEAM, coef="phenotype_FGS_vs_WT", type="ashr")
@@ -160,71 +157,6 @@ fig3b <-
   theme_bw(base_size = 7) + theme(legend.position = "none",
                                   panel.grid.major = element_blank(),
                                   panel.grid.minor = element_blank())
-
-
-#Fig S12
-  ggplot() +
-  geom_hline(yintercept= -log10(0.05), size = 0.5, lty = "dashed", alpha=0.4) +
-  geom_point(data=subset(res.wtvsfgs_Flank,Gene != "g2346"), 
-             aes(x=log2FoldChange, y=-log10(padj), 
-                 color = col)) +
-  geom_point(data=subset(res.wtvsfgs_Flank,Gene == "g2346"), 
-             aes(x=log2FoldChange, y=-log10(padj), 
-                 color = col), size=2, pch=8) +
-  #scale_x_continuous(limits = c(-7,7), breaks = seq(-10,10,2.5), expand = c(0,0)) +
-  #scale_y_continuous(limits = c(0,45), breaks = seq(0,50,10)) +
-  scale_color_manual(values = c("#55185D","darkgrey")) +
-  xlab(expression(paste("log"[2],"(expression fold change)",sep="")))+
-  ylab(expression(paste("-log"[10],"(",italic(""*P*""),"-value)",sep="")))+
-  theme_bw(base_size = 10) + theme(legend.position = "none",
-                                  panel.grid.major = element_blank(),
-                                  panel.grid.minor = element_blank())
-
-
-
-####PCA####
-
-xPE <- assay(vst_PMEAM)
-colnames(xPE)
-
-rownames(samples) <- samples$prefix
-rownames(samples)
-
-all(colnames(xPE) == rownames(samples))
-#remotes::install_version("matrixStats", version="1.1.0")
-library(matrixStats)
-p_PMEAM <- PCAtools::pca(xPE, metadata = samples, removeVar = 0.1)
-#pairsplot(p_PMEAM)
-
-biplot(p_PMEAM, x="PC1", y="PC2",
-       lab = as.character(p$metadata$individual),
-       colby = 'phenotype', colkey=c('FGS'="purple", 'WT'="darkgrey"),
-       legendPosition = 'right', legendLabSize = 12, legendIconSize = 6.0,
-       gridlines.major=FALSE, gridlines.minor=FALSE,
-       drawConnectors = FALSE,
-       title = 'EAM PCA',
-       subtitle = 'PC1 versus PC2',
-       caption = '')
-
-xB <- assay(vst_Brain)
-colnames(xB)
-
-rownames(samples) <- samples$prefix
-rownames(samples)
-
-all(colnames(xB) == rownames(samples))
-
-p_Brain <- PCAtools::pca(xB, metadata = samples, removeVar = 0.1)
-
-biplot(p_Brain, x="PC1", y="PC2",
-       lab = as.character(p$metadata$individual),
-       colby = 'phenotype', colkey=c('FGS'="purple", 'WT'="darkgrey"),
-       legendPosition = 'right', legendLabSize = 12, legendIconSize = 6.0,
-       gridlines.major=FALSE, gridlines.minor=FALSE,
-       drawConnectors = FALSE,
-       title = 'Brain PCA',
-       subtitle = 'PC1 versus PC2',
-       caption = '')
 
 #################### START PRODUCE OUT TABLES ####################
 
