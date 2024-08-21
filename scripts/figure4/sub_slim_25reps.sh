@@ -16,4 +16,4 @@ source activate /home/groups/schumer/lab_member_folders/tris/miniconda/envs/slim
 
 ml gcc
 
-for i in {1..25}; do /home/groups/schumer/shared_bin/SLiM/slim FGS_IZAPA_simulation_test.slim; done
+for i in {1..25}; do /home/groups/schumer/shared_bin/SLiM/slim neutral_sim_IZAP_64725gen.slim; done
