@@ -4,6 +4,7 @@ if [ "$#" -ne 3 ]; then
     echo "Usage: ./extract_blast_results.sh <ref.fa> <query> <flank_size>"
     exit 1
 fi
+
 ml biology ncbi-blast+ R
 #requires seqkit
 
