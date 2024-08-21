@@ -8,10 +8,6 @@
 
 module load biology samtools viz gnuplot
 
-#cd input/
-#ln -s /oak/stanford/groups/schumer/data/lab_member_folders/tris/falsegravid/nanopore/*sorted.vcf .
-#cd ../
-
 #VCF=xbir-BEJU-S231-3-IV-23-M01-FGS.dorado.0.3.3.fastq_2_xbir-COAC-16-VIII-22-M_v2023.1.fa_sorted.vcf
 #VCF=xbir-BEJU-S231-9-VIII-23-M01-WT.dorado.0.3.3.fastq_2_xbir-COAC-16-VIII-22-M_v2023.1.fa_sorted.vcf
 #VCF=xbir-BEJU-S231-9-VIII-23-M02-FGS.dorado.0.3.3.fastq_2_xbir-COAC-16-VIII-22-M_v2023.1.fa_sorted.vcf
