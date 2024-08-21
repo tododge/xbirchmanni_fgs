@@ -22,4 +22,4 @@ VCF=xbir-IZAP-S234-9-VIII-23-M03-FGS.dorado.0.3.3.fastq_2_xbir-COAC-16-VIII-22-M
 VCF_PREFIX=${VCF%%.vcf}
 echo ${VCF_PREFIX}
 
-seq 51 100 | xargs -i echo ./psmc/psmc -N25 -t15 -r5 -b -p "4+25*2+4+6" -o ./results/bootstrap/$VCF_PREFIX.round-{}.psmc ./input/$VCF_PREFIX.split.psmcfa | sh
+seq 1 100 | xargs -i echo ./psmc/psmc -N25 -t15 -r5 -b -p "4+25*2+4+6" -o ./results/bootstrap/$VCF_PREFIX.round-{}.psmc ./input/$VCF_PREFIX.split.psmcfa | sh
