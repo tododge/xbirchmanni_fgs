@@ -1,6 +1,6 @@
-genome=/scratch/groups/schumer/tris/falsegravid/gwas/xbir_WT/ref/xbir-COAC-16-VIII-22-M_v2023.1.fa
+genome=~/gwas/xbir_WT/ref/xbir-COAC-16-VIII-22-M_v2023.1.fa
 gwas_name=gwas_xbir-COAC-16-VIII-22-M_v2023.1.fa_FGS_329inds
-header=/scratch/groups/schumer/lyle/nezzy_gwas/scripts/sbatch_header_schumer.txt
+header=sbatch_header_schumer.txt
 
 awk ' $2 > 1000000 ' $genome.fai | cut -f1 > xiphophorus_chroms.txt
 
